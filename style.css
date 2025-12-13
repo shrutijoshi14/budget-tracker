@@ -77,6 +77,7 @@ header p {
   color: var(--color);
   padding: 20px;
 }
+
 .cards .center {
   display: flex;
   justify-content: center;
@@ -84,6 +85,7 @@ header p {
   flex-direction: column;
   height: 120px;
 }
+
 .card {
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -94,6 +96,13 @@ header p {
 .card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transform: scale(1.05);
+}
+
+.cal-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card-1 {
@@ -272,7 +281,7 @@ header p {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  color: var(--color);
+  color: var(--background-color);
   text-decoration: none;
 }
 
@@ -529,4 +538,256 @@ hr {
   padding: 4px 0;
   font-size: 16px;
   font-weight: 500;
+}
+
+/* cards transaction */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.count-badge {
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+/* CALENDAR */
+.calendar-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.nav-btn {
+  border: none;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.month-year {
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  text-align: center;
+}
+
+.day-name {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.calendar-grid div {
+  padding: 10px 0;
+}
+
+.muted {
+  color: #cbd5e1;
+}
+
+/* TRANSACTIONS */
+.transaction-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.icon-circle {
+  background: #fee2e2;
+  color: #dc2626;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.transaction-info h3 {
+  margin: 0 0 6px;
+}
+
+.meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.tag {
+  background: #fdecec;
+  color: #dc2626;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.type {
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.transaction-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.amount {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.amount.negative {
+  color: #ef4444;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Summary */
+/* MAIN GRID */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 24px;
+}
+
+/* CARD */
+.summary-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* HEADINGS */
+.summary-card h2 {
+  margin: 0 0 26px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* LIST */
+.summary-list {
+  display: grid;
+  row-gap: 22px;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  font-size: 18px;
+}
+
+.summary-row span:first-child {
+  color: #475569;
+}
+
+/* DIVIDER */
+.summary-card hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 28px 0;
+}
+
+/* AVERAGE */
+.summary-row.average {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* CATEGORY */
+.category-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.category-pill {
+  background: #fde2e2;
+  font-size: 15px;
+  color: #b91c1c;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.category-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.amount {
+  font-weight: 700;
+  color: #000;
+  font-size: 15px;
+}
+
+.type {
+  font-size: 15px;
+  color: #475569;
+}
+
+/* COLORS */
+.green {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.red {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.blue {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.black {
+  color: #000;
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
 }
