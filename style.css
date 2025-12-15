@@ -96,6 +96,7 @@ header p {
 .card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
 }
 
 .cal-card {
@@ -119,7 +120,7 @@ header p {
   background: linear-gradient(135deg, #8124be 0%, #b366f6 100%);
 }
 .card h2 {
-  font-size: 22px;
+  font-size: 18px;
   margin-bottom: 20px;
 }
 
@@ -136,13 +137,11 @@ header p {
 
 .card .icon {
   display: grid;
-  grid-template-columns: auto auto; /* text + icon */
-  align-items: center; /* vertical center */
-  justify-content: space-between; /* horizontal center */
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
-  white-space: nowrap; /* keep everything on one line */
-  /* background: #eee; your header bg */
-  /* padding: 5px 10px; */
+  white-space: nowrap;
 }
 
 .card .icon .bi {
@@ -297,26 +296,45 @@ header p {
 
 .buttons .add-details-btn:hover {
   border: 2px solid var(--net);
-  background: var(--color);
+  background: var(--background-color);
   color: var(--net);
 }
 
 .buttons .view-btn:hover {
   border: 2px solid var(--primary-color);
-  background: var(--color);
+  background: var(--background-color);
   color: var(--primary-color);
 }
 
 /* Add Transaction Form Styles */
-/* Back to dashboard button */
+/* Back to
+ard button */
 .dashboard-btn {
-  max-width: 600px;
+  max-width: 100%;
   margin: 20px auto;
   background: var(--net);
   padding: 20px;
   background: #fff;
   border-radius: 8px;
   font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.dashboard-btn > .add-btn {
+  border: 2px solid var(--net);
+  transition: all 0.3s ease;
+  color: var(--net);
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 50px;
+}
+
+.dashboard-btn > .add-btn:hover {
+  background: var(--net);
+  color: var(--background-color);
 }
 
 .dashboard-btn a {
@@ -446,6 +464,7 @@ form .category button {
   border-radius: 18px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
 }
 
 .month-header {
@@ -553,7 +572,7 @@ hr {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 22px;
+  font-size: 15px;
   font-weight: 700;
   margin-bottom: 24px;
 }

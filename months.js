@@ -1,162 +1,105 @@
-/* ------------------ MONTHS DATA (EDITABLE) ------------------ */
-// Leave empty if month has no data
-const monthsData = [
-  { month: "January", income: 0, expenses: 35, transactions: 1 },
-  { month: "February", income: 0 },
-  { month: "March", income: 0 },
-  { month: "April", income: 0 },
-  { month: "May", income: 0 },
-  { month: "June", income: 0 },
-  { month: "July", income: 0 },
-  { month: "August", income: 0 },
-  { month: "September", income: 0, expenses: 500, transactions: 1 },
-  { month: "October", income: 50000, expenses: 0, transactions: 1 },
-  { month: "November", income: 0, expenses: 100 },
-  { month: "December", income: 2000, expenses: 50, transactions: 2 }
+const KEY = "bt_transactions";
+const monthsContainer = document.querySelector( ".months" );
+
+let currentYear =
+  Number( localStorage.getItem( "bt_currentYear" ) ) || new Date().getFullYear();
+
+document.getElementById( "currentYear" ).textContent = currentYear;
+
+const monthNames = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
 ];
 
-// Normalize missing fields
-monthsData.forEach( m => {
-  m.income = m.income ?? 0;
-  m.expenses = m.expenses ?? 0;
-  m.transactions = m.transactions ?? 0;
-  m.savings = m.savings ?? ( m.income - m.expenses );
-} );
+function getTransactions () {
+  return JSON.parse( localStorage.getItem( KEY ) || "[]" );
+}
 
-/* ------------------------------------------------------------- */
-/* ------------------ GENERATE MONTH CARDS --------------------- */
-/* ------------------------------------------------------------- */
-
-function loadMonthCards () {
-  const monthsContainer = document.querySelector( ".months" );
+function renderMonths () {
   monthsContainer.innerHTML = "";
 
-  monthsData.forEach( ( m, index ) => {
-    const income = m.income ?? 0;
-    const expenses = m.expenses ?? 0;
-    const savings = m.savings ?? ( income - expenses );
-    const transactions = m.transactions ?? 0;
+  const transactions = getTransactions();
 
-    /* ---------------- PERCENTAGE LOGIC ---------------- */
-    let percent = "+0%";
-    let percentClass = "positive";
+  monthNames.forEach( ( name, monthIndex ) => {
+    const monthData = transactions.filter( t => {
+      const d = new Date( t.date );
+      return d.getFullYear() === currentYear && d.getMonth() === monthIndex;
+    } );
 
-    if ( income === 0 && expenses > 0 )
-    {
-      percent = "-100%";
-      percentClass = "negative";
+    const income = monthData
+      .filter( t => t.type === "income" )
+      .reduce( ( s, t ) => s + Number( t.amount ), 0 );
 
-    } else if ( income > 0 && expenses === 0 )
-    {
-      percent = "+100%";
-      percentClass = "positive";
+    const expense = monthData
+      .filter( t => t.type === "expense" )
+      .reduce( ( s, t ) => s + Number( t.amount ), 0 );
 
-    } else if ( income > 0 )
-    {
-      let calc = ( ( savings / income ) * 100 ).toFixed( 0 );
-      if ( calc > 100 ) calc = 100;
+    const card = document.createElement( "div" );
+    card.className = "month-card";
 
-      percent = ( calc >= 0 ? "+" : "" ) + calc + "%";
-      percentClass = calc >= 0 ? "positive" : "negative";
-    }
-
-    /* ---------------- TEMPLATE ---------------- */
-    const monthCard = `
-      <a class="card-link" href="day.html?month=${ index }">
-        <div class="month-card">
-
-          <div class="month-header">
-            <div class="month-title">
-              <i class="bi bi-calendar-event"></i>
-              <span>${ m.month }</span>
-            </div>
-
-            <div class="percentage-badge ${ percentClass }">
-              ↗ ${ percent }
-            </div>
-          </div>
-
-          <div class="stats-row">
-            <div class="stat-box income-box">
-              <span class="label">Income</span>
-              <span class="value green">$${ income }</span>
-            </div>
-
-            <div class="stat-box expenses-box">
-              <span class="label">Expenses</span>
-              <span class="value red">$${ expenses }</span>
-            </div>
-
-            <div class="stat-box savings-box">
-              <span class="label">Savings</span>
-              <span class="value blue">$${ savings }</span>
-            </div>
-          </div>
-
-          <hr />
-
-          <div class="details-row">
-            <span>Net Savings:</span>
-            <span class="value ${ savings < 0 ? "red" : "green" }">
-              $${ savings }
-            </span>
-          </div>
-
-          <div class="details-row">
-            <span>Transactions:</span>
-            <span class="value">${ transactions }</span>
-          </div>
-
+    card.innerHTML = `
+      <div class="month-header">
+        <div class="month-title">
+          <i class="bi bi-calendar-event"></i>
+          <span>${ name }</span>
         </div>
-      </a>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box income-box">
+          <span class="label">Income</span>
+          <span class="value green">$${ income }</span>
+        </div>
+        <div class="stat-box expenses-box">
+          <span class="label">Expenses</span>
+          <span class="value red">$${ expense }</span>
+        </div>
+      </div>
+
+      <hr />
+      <div class="details-row">
+        <span>Transactions:</span>
+        <span class="value">${ monthData.length }</span>
+      </div>
     `;
 
-    monthsContainer.innerHTML += monthCard;
+    card.onclick = () => {
+      window.location.href = `day.html?year=${ currentYear }&month=${ monthIndex }`;
+    };
+
+    monthsContainer.appendChild( card );
   } );
 
-  fixAnchorColors(); // <<< IMPORTANT FIX
+  updateSummary( transactions );
 }
 
-/* ------------------------------------------------------------- */
-/* ----------- FIX: REMOVE BLUE/PURPLE LINK COLOR -------------- */
-/* ------------------------------------------------------------- */
+function updateSummary ( transactions ) {
+  const income = transactions
+    .filter( t => t.type === "income" )
+    .reduce( ( s, t ) => s + Number( t.amount ), 0 );
 
-function fixAnchorColors () {
-  const style = document.createElement( "style" );
-  style.innerHTML = `
-    .card-link,
-    .card-link:link,
-    .card-link:visited,
-    .card-link:hover,
-    .card-link:active,
-    .card-link:focus {
-      color: inherit !important;
-      text-decoration: none !important;
-    }
-  `;
-  document.head.appendChild( style );
+  const expense = transactions
+    .filter( t => t.type === "expense" )
+    .reduce( ( s, t ) => s + Number( t.amount ), 0 );
+
+  document.getElementById( "totalIncome" ).textContent = `$${ income }`;
+  document.getElementById( "totalExpenses" ).textContent = `$${ expense }`;
+  document.getElementById( "totalSavings" ).textContent = `$${ income - expense }`;
 }
 
-/* ------------------------------------------------------------- */
-/* ------------------ SUMMARY CARDS ---------------------------- */
-/* ------------------------------------------------------------- */
-
-function updateSummaryCards () {
-  const totalIncome = monthsData.reduce( ( sum, m ) => sum + ( m.income ?? 0 ), 0 );
-  const totalExpenses = monthsData.reduce( ( sum, m ) => sum + ( m.expenses ?? 0 ), 0 );
-
-  const totalSavings = totalIncome - totalExpenses;
-
-  document.getElementById( "totalIncome" ).textContent = "$" + totalIncome;
-  document.getElementById( "totalExpenses" ).textContent = "$" + totalExpenses;
-  document.getElementById( "totalSavings" ).textContent = "$" + totalSavings;
-}
-
-/* ------------------------------------------------------------- */
-/* ------------------------- INIT ------------------------------ */
-/* ------------------------------------------------------------- */
-
-window.onload = () => {
-  loadMonthCards();
-  updateSummaryCards();
+/* YEAR CONTROLS */
+document.getElementById( "prevYear" ).onclick = () => {
+  currentYear--;
+  localStorage.setItem( "bt_currentYear", currentYear );
+  document.getElementById( "currentYear" ).textContent = currentYear;
+  renderMonths();
 };
+
+document.getElementById( "nextYear" ).onclick = () => {
+  currentYear++;
+  localStorage.setItem( "bt_currentYear", currentYear );
+  document.getElementById( "currentYear" ).textContent = currentYear;
+  renderMonths();
+};
+
+document.addEventListener( "DOMContentLoaded", renderMonths );
