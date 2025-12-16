@@ -195,6 +195,16 @@ function updateMonthlyChart ( year ) {
 
 function updatePieChart ( year ) {
   const data = getByYear( year ).filter( t => t.type === 'expense' );
+
+  if ( !data.length )
+  {
+    // Optionally show "No data yet"
+    pieChart.data.labels = [ 'No Data' ];
+    pieChart.data.datasets[ 0 ].data = [ 1 ];
+    pieChart.update();
+    return;
+  }
+
   const categories = {};
 
   data.forEach( t => {
