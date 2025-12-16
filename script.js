@@ -1,145 +1,48 @@
-// -------- Monthly Savings Chart (3 datasets) --------
-// const monthlyCtx = document.getElementById( 'monthlyChart' );
-
-// new Chart( monthlyCtx, {
-//   type: 'bar',
-//   data: {
-//     labels: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-//     datasets: [
-//       {
-//         label: 'Income',
-//         data: [ 45000, 48000, 47000, 50000, 52000, 51000, 53000, 54000, 55000, 56000, 57000, 58000 ],
-//         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-//         borderColor: 'rgb(75, 192, 192)',
-//         borderWidth: 2
-//       },
-//       {
-//         label: 'Expenses',
-//         data: [ 25000, 26000, 24000, 25500, 26000, 27000, 28000, 30000, 31000, 32000, 33000, 34000 ],
-//         backgroundColor: 'rgba(255, 99, 132, 0.2)',
-//         borderColor: 'rgb(255, 99, 132)',
-//         borderWidth: 2
-//       },
-//       {
-//         label: 'Net Savings',
-//         data: [ 20000, 22000, 23000, 24500, 26000, 24000, 25000, 24000, 24000, 24000, 24000, 24000 ],
-//         backgroundColor: 'rgba(54, 162, 235, 0.2)',
-//         borderColor: 'rgb(54, 162, 235)',
-//         borderWidth: 2
-//       }
-//     ]
-//   },
-//   options: {
-//     scales: {
-//       y: { beginAtZero: true }
-//     },
-//     plugins: {
-//       legend: { display: false },
-//       tooltip: {
-//         enabled: false,
-//         mode: 'index',
-//         intersect: false,
-//         external: function ( context ) {
-
-//           const tooltipModel = context.tooltip;
-//           const tooltipEl = document.getElementById( "customTooltip" );
-
-//           // Hide tooltip
-//           if ( tooltipModel.opacity === 0 )
-//           {
-//             tooltipEl.style.display = "none";
-//             return;
-//           }
-
-//           // Get values
-//           const month = tooltipModel.title[ 0 ];
-//           const income = tooltipModel.dataPoints[ 0 ].raw;
-//           const expenses = tooltipModel.dataPoints[ 1 ].raw;
-//           const savings = tooltipModel.dataPoints[ 2 ].raw;
-
-//           // Set HTML
-//           tooltipEl.innerHTML = `
-//       <div class="month">${ month }</div>
-//       <div class="income">Income : ${ income }</div>
-//       <div class="expenses">Expenses : ${ expenses }</div>
-//       <div class="savings">Net Savings : ${ savings }</div>
-//     `;
-
-//           // Position
-//           const position = context.chart.canvas.getBoundingClientRect();
-//           tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 20 + "px";
-//           tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY - 20 + "px";
-
-//           tooltipEl.style.display = "block";
-//         }
-//       }
-//     }
-//   }
-// } );
-
-// // -------- Expense Pie Chart --------
-// const pieCtx = document.getElementById( 'expensePie' );
-
-// new Chart( pieCtx, {
-//   type: 'pie',
-//   data: {
-//     labels: [ 'Food', 'Bills', 'Transport', 'Shopping', 'Entertainment', 'Other' ],
-//     datasets: [ {
-//       data: [ 5000, 2500, 1200, 3000, 1800, 900 ],
-//       backgroundColor: [
-//         'rgba(255, 99, 132, 0.6)',
-//         'rgba(255, 159, 64, 0.6)',
-//         'rgba(255, 205, 86, 0.6)',
-//         'rgba(75, 192, 192, 0.6)',
-//         'rgba(54, 162, 235, 0.6)',
-//         'rgba(153, 102, 255, 0.6)'
-//       ],
-//       borderColor: [
-//         'rgb(255, 99, 132)',
-//         'rgb(255, 159, 64)',
-//         'rgb(255, 205, 86)',
-//         'rgb(75, 192, 192)',
-//         'rgb(54, 162, 235)',
-//         'rgb(153, 102, 255)'
-//       ],
-//       borderWidth: 2,
-//     } ]
-//   },
-//   options: {
-//     responsive: true,
-//     plugins: {
-//       legend: { position: 'bottom' },
-//       tooltip: { enabled: true }
-//     }
-//   }
-// } );
-
 /* ===============================
-   GLOBAL STORAGE KEYS
+   GLOBAL STORAGE KEYS & HELPERS
 ================================ */
 const KEY = 'bt_transactions';
 const YEAR_KEY = 'bt_currentYear';
 
-/* ===============================
-   STORAGE HELPERS
-================================ */
 function loadTransactions () {
-  return JSON.parse( localStorage.getItem( KEY ) || '[]' );
+  const data = localStorage.getItem( KEY );
+  return data ? JSON.parse( data ) : [];
+}
+
+function saveTransactions ( transactions ) {
+  localStorage.setItem( KEY, JSON.stringify( transactions ) );
+}
+
+function normalizeTransaction ( tx ) {
+  return {
+    id: tx.id,
+    description: tx.description || tx.item || "Untitled",
+    type: tx.type || tx.transactionType || "",
+    category: tx.category || tx.categoryName || "",
+    date: tx.date || tx.transactionDate || "",
+    amount: Number( tx.amount || 0 )
+  };
 }
 
 function getByYear ( year ) {
-  return loadTransactions().filter( ( t ) => new Date( t.date ).getFullYear() === Number( year ) );
+  return loadTransactions()
+    .map( normalizeTransaction )
+    .filter( t => new Date( t.date ).getFullYear() === Number( year ) );
 }
 
 function getByMonth ( year, month ) {
-  return loadTransactions().filter( ( t ) => {
-    const d = new Date( t.date );
-    return d.getFullYear() === Number( year ) && d.getMonth() + 1 === Number( month );
-  } );
+  return loadTransactions()
+    .map( normalizeTransaction )
+    .filter( t => {
+      const d = new Date( t.date );
+      return d.getFullYear() === Number( year ) && d.getMonth() === Number( month );
+    } );
 }
 
 function sum ( list, type ) {
-  return list.filter( ( t ) => t.type === type ).reduce( ( s, t ) => s + Number( t.amount ), 0 );
+  return list
+    .filter( t => t.type === type )
+    .reduce( ( s, t ) => s + Number( t.amount ), 0 );
 }
 
 /* ===============================
@@ -155,7 +58,7 @@ function setYear ( year ) {
 }
 
 /* ===============================
-   CHART INITIALIZATION (UI SAME)
+   CHART INITIALIZATION
 ================================ */
 const monthlyCtx = document.getElementById( 'monthlyChart' );
 const pieCtx = document.getElementById( 'expensePie' );
@@ -213,14 +116,13 @@ let monthlyChart = new Chart( monthlyCtx, {
 
           tooltipEl.innerHTML = `
             <div class="month">${ month }</div>
-            <div class="income">Income : ${ income }</div>
-            <div class="expenses">Expenses : ${ expenses }</div>
-            <div class="savings">Net Savings : ${ savings }</div>
+            <div class="income">Income: $${ income.toFixed( 2 ) }</div>
+            <div class="expenses">Expenses: $${ expenses.toFixed( 2 ) }</div>
+            <div class="savings">Net Savings: $${ savings.toFixed( 2 ) }</div>
           `;
 
           const position = context.chart.canvas.getBoundingClientRect();
-          tooltipEl.style.left =
-            position.left + window.pageXOffset + tooltipModel.caretX + 20 + 'px';
+          tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 20 + 'px';
           tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY - 20 + 'px';
           tooltipEl.style.display = 'block';
         },
@@ -250,7 +152,19 @@ let pieChart = new Chart( pieCtx, {
   },
   options: {
     responsive: true,
-    plugins: { legend: { position: 'bottom' } },
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: function ( context ) {
+            const label = context.label || '';
+            const value = context.parsed || 0;
+            return label + ': $' + value.toFixed( 2 );
+          }
+        }
+      }
+    },
   },
 } );
 
@@ -262,14 +176,15 @@ function updateMonthlyChart ( year ) {
   const expenseArr = [];
   const savingsArr = [];
 
-  for ( let m = 1; m <= 12; m++ )
+  for ( let m = 0; m < 12; m++ )
   {
     const data = getByMonth( year, m );
     const income = sum( data, 'income' );
     const expense = sum( data, 'expense' );
+    const savings = sum( data, 'savings' );
     incomeArr.push( income );
     expenseArr.push( expense );
-    savingsArr.push( income - expense );
+    savingsArr.push( income - expense + savings );
   }
 
   monthlyChart.data.datasets[ 0 ].data = incomeArr;
@@ -279,10 +194,10 @@ function updateMonthlyChart ( year ) {
 }
 
 function updatePieChart ( year ) {
-  const data = getByYear( year ).filter( ( t ) => t.type === 'expense' );
+  const data = getByYear( year ).filter( t => t.type === 'expense' );
   const categories = {};
 
-  data.forEach( ( t ) => {
+  data.forEach( t => {
     categories[ t.category ] = ( categories[ t.category ] || 0 ) + Number( t.amount );
   } );
 
@@ -297,6 +212,12 @@ function updatePieChart ( year ) {
 function render () {
   const year = currentYear();
   document.getElementById( 'currentYear' ).textContent = year;
+  document.getElementById( 'pieYear' ).textContent = year;
+
+  // Update year labels in cards
+  document.querySelectorAll( '[id^="yearLabel"]' ).forEach( el => {
+    el.textContent = year;
+  } );
 
   const data = getByYear( year );
   const income = sum( data, 'income' );
@@ -313,21 +234,11 @@ function render () {
   monthsBox.innerHTML = '';
 
   const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
-  for ( let m = 1; m <= 12; m++ )
+  for ( let m = 0; m < 12; m++ )
   {
     const mData = getByMonth( year, m );
     const inc = sum( mData, 'income' );
@@ -341,25 +252,32 @@ function render () {
       <div class="month-header">
         <div class="month-title">
           <i class="bi bi-calendar-event"></i>
-          <span>${ monthNames[ m - 1 ] }</span>
+          <span>${ monthNames[ m ] }</span>
         </div>
       </div>
       <div class="stats-row">
-        <div class="stat-box income-box"><span class="label">Income</span><span class="value green">$${ inc.toFixed(
-      2
-    ) }</span></div>
-        <div class="stat-box expenses-box"><span class="label">Expenses</span><span class="value red">$${ exp.toFixed(
-      2
-    ) }</span></div>
-        <div class="stat-box savings-box"><span class="label">Savings</span><span class="value blue">$${ sav.toFixed(
-      2
-    ) }</span></div>
+        <div class="stat-box income-box">
+          <span class="label">Income</span>
+          <span class="value green">$${ inc.toFixed( 2 ) }</span>
+        </div>
+        <div class="stat-box expenses-box">
+          <span class="label">Expenses</span>
+          <span class="value red">$${ exp.toFixed( 2 ) }</span>
+        </div>
+        <div class="stat-box savings-box">
+          <span class="label">Savings</span>
+          <span class="value blue">$${ sav.toFixed( 2 ) }</span>
+        </div>
       </div>
       <hr />
-      <div class="details-row"><span>Net Savings:</span><span class="value ${ netM < 0 ? 'red' : 'green'
-      }">$${ netM.toFixed( 2 ) }</span></div>
-      <div class="details-row"><span>Transactions:</span><span class="value">${ mData.length
-      }</span></div>
+      <div class="details-row">
+        <span>Net Savings:</span>
+        <span class="value ${ netM < 0 ? 'red' : 'green' }">$${ netM.toFixed( 2 ) }</span>
+      </div>
+      <div class="details-row">
+        <span>Transactions:</span>
+        <span class="value">${ mData.length }</span>
+      </div>
     `;
 
     card.onclick = () => {

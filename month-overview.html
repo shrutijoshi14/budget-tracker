@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Transaction</title>
+    <title>Monthly Overview</title>
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
@@ -16,6 +16,7 @@
         <i class="bi bi-arrow-left-circle"></i>
         <span>Back to Dashboard</span>
       </a>
+      <a class="add-btn" href="add-transaction-form.html">Add Transaction</a>
     </div>
 
     <header>
@@ -33,48 +34,7 @@
     </header>
 
     <!-- Month Cards -->
-    <div class="months">
-      <!-- Month Card 1 -->
-      <div class="month-card">
-        <div class="month-header">
-          <div class="month-title">
-            <i class="bi bi-calendar-event"></i>
-            <span>January</span>
-          </div>
-
-          <div class="percentage-badge negative">↬ -100%</div>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat-box income-box">
-            <span class="label">Income</span>
-            <span class="value green">$0</span>
-          </div>
-
-          <div class="stat-box expenses-box">
-            <span class="label">Expenses</span>
-            <span class="value red">$35</span>
-          </div>
-
-          <div class="stat-box savings-box">
-            <span class="label">Savings</span>
-            <span class="value blue">$0</span>
-          </div>
-        </div>
-
-        <hr />
-
-        <div class="details-row">
-          <span>Net Savings:</span>
-          <span class="value red">-$35</span>
-        </div>
-
-        <div class="details-row">
-          <span>Transactions:</span>
-          <span class="value">1</span>
-        </div>
-      </div>
-    </div>
+    <div class="months" id="monthsContainer"></div>
 
     <!-- Cards -->
     <div id="cards" class="cards">
@@ -93,7 +53,13 @@
       <!-- Card 3 -->
       <div class="card center card-3">
         <h4 id="totalSavings">$0</h4>
-        <p>Net Savings</p>
+        <p>Total Savings</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card center card-4">
+        <h4 id="netBalance">$0</h4>
+        <p>Net Balance</p>
       </div>
     </div>
 

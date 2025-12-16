@@ -1,17 +1,25 @@
 ( function () {
+
   const TX_KEY = "bt_transactions";
   const CAT_KEY = "bt_categories";
 
   const form = document.querySelector( ".form-container" );
-  const typeSelect = document.getElementById( "type" );
-  const categorySelect = document.getElementById( "category" );
+  const item = document.getElementById( "item" );
+  const type = document.getElementById( "type" );
+  const category = document.getElementById( "category" );
+  const date = document.getElementById( "date" );
+  const amount = document.getElementById( "amount" );
   const addCategoryBtn = document.querySelector( ".category button" );
 
-  /* ---------- Storage ---------- */
   const load = ( k, d ) => JSON.parse( localStorage.getItem( k ) ) || d;
   const save = ( k, d ) => localStorage.setItem( k, JSON.stringify( d ) );
 
-  /* ---------- Init Categories ---------- */
+  const params = new URLSearchParams( location.search );
+  const editId = params.get( "edit" );
+
+  let transactions = load( TX_KEY, [] );
+
+  /* ---------- INIT CATEGORIES ---------- */
   if ( !localStorage.getItem( CAT_KEY ) )
   {
     save( CAT_KEY, {
@@ -21,128 +29,147 @@
     } );
   }
 
-  categorySelect.disabled = true;
+  category.disabled = true;
 
-  /* ---------- Render Categories ---------- */
-  function renderCategories ( type ) {
+  function renderCategories ( typeVal ) {
     const cats = load( CAT_KEY, {} );
-    categorySelect.innerHTML = "";
+    category.innerHTML = "";
 
-    cats[ type ].forEach( c => {
-      categorySelect.appendChild( new Option( c, c ) );
+    cats[ typeVal ].forEach( c => {
+      category.appendChild( new Option( c, c ) );
     } );
 
-    categorySelect.appendChild( new Option( "────────────", "" ) );
-    categorySelect.appendChild( new Option( "✏️ Edit selected category", "__edit" ) );
-    categorySelect.appendChild( new Option( "🗑️ Delete selected category", "__delete" ) );
+    category.appendChild( new Option( "────────────", "" ) );
+    category.appendChild( new Option( "✏️ Edit selected category", "__edit" ) );
+    category.appendChild( new Option( "🗑️ Delete selected category", "__delete" ) );
 
-    categorySelect.disabled = false;
+    category.disabled = false;
   }
 
-  /* ---------- Transaction Type Change ---------- */
-  typeSelect.addEventListener( "change", () => {
-    if ( typeSelect.value === "select" )
+  /* ---------- TYPE CHANGE ---------- */
+  type.addEventListener( "change", () => {
+    if ( type.value === "select" )
     {
-      categorySelect.disabled = true;
-      categorySelect.innerHTML = `<option>Select Transaction Type first</option>`;
+      category.disabled = true;
+      category.innerHTML = `<option>Select Transaction Type first</option>`;
       return;
     }
-    renderCategories( typeSelect.value );
+    renderCategories( type.value );
   } );
 
-  /* ---------- Category Dropdown Actions ---------- */
-  categorySelect.addEventListener( "change", () => {
-    const action = categorySelect.value;
-    const type = typeSelect.value;
+  /* ---------- CATEGORY ACTION ---------- */
+  category.addEventListener( "change", () => {
+    const action = category.value;
     const cats = load( CAT_KEY, {} );
+    const typeVal = type.value;
 
-    // Save last selected real category
     if ( !action.startsWith( "__" ) )
     {
-      categorySelect.lastCategory = action;
+      category.last = action;
       return;
     }
 
-    // EDIT
     if ( action === "__edit" )
     {
-      const current = categorySelect.lastCategory;
-      if ( !current ) return;
-
-      const updated = prompt( "Edit category name:", current );
+      if ( !category.last ) return;
+      const updated = prompt( "Edit category:", category.last );
       if ( !updated ) return;
 
-      const idx = cats[ type ].indexOf( current );
-      if ( idx > -1 )
-      {
-        cats[ type ][ idx ] = updated.trim();
-        save( CAT_KEY, cats );
-        renderCategories( type );
-        categorySelect.value = updated.trim();
-      }
+      const i = cats[ typeVal ].indexOf( category.last );
+      cats[ typeVal ][ i ] = updated.trim();
+      save( CAT_KEY, cats );
+      renderCategories( typeVal );
+      category.value = updated.trim();
     }
 
-    // DELETE
     if ( action === "__delete" )
     {
-      const current = categorySelect.lastCategory;
-      if ( !current ) return;
-
-      cats[ type ] = cats[ type ].filter( c => c !== current );
+      if ( !category.last ) return;
+      cats[ typeVal ] = cats[ typeVal ].filter( c => c !== category.last );
       save( CAT_KEY, cats );
-      renderCategories( type );
+      renderCategories( typeVal );
     }
   } );
 
-  /* ---------- Add Category Button ---------- */
+  /* ---------- ADD CATEGORY ---------- */
   addCategoryBtn.addEventListener( "click", e => {
     e.preventDefault();
-
-    const type = typeSelect.value;
-    if ( type === "select" )
+    if ( type.value === "select" )
     {
       alert( "Select transaction type first" );
       return;
     }
 
-    const name = prompt( "Enter new category name:" );
+    const name = prompt( "New category name:" );
     if ( !name ) return;
 
     const cats = load( CAT_KEY, {} );
-    if ( !cats[ type ].includes( name.trim() ) )
-    {
-      cats[ type ].push( name.trim() );
-      save( CAT_KEY, cats );
-      renderCategories( type );
-      categorySelect.value = name.trim();
-    }
+    cats[ type.value ].push( name.trim() );
+    save( CAT_KEY, cats );
+
+    renderCategories( type.value );
+    category.value = name.trim();
   } );
 
-  /* ---------- Submit Transaction ---------- */
+  /* ---------- EDIT MODE PREFILL ---------- */
+  if ( editId )
+  {
+    const tx = transactions.find( t => String( t.id ) === editId );
+    if ( tx )
+    {
+      document.querySelector( "h1" ).textContent = "Edit Transaction";
+      document.querySelector( ".submit-btn" ).textContent = "Update Transaction";
+
+      item.value = tx.description || tx.item;
+      type.value = tx.transactionType || tx.type;
+      renderCategories( type.value );
+      category.value = tx.categoryName || tx.category;
+      date.value = tx.transactionDate || tx.date;
+      amount.value = tx.amount;
+    }
+  }
+
+  /* ---------- SUBMIT ---------- */
   form.addEventListener( "submit", e => {
     e.preventDefault();
 
     const tx = {
-      id: Date.now(),
+      id: editId ? Number( editId ) : Date.now(),
+
+      /* dashboard compatible */
+      description: item.value.trim(),
+      transactionType: type.value,
+      categoryName: category.value,
+      transactionDate: date.value,
+
+      /* backward compatibility */
       item: item.value.trim(),
       type: type.value,
       category: category.value,
       date: date.value,
+
       amount: Number( amount.value )
     };
 
-    if ( !tx.item || tx.type === "select" || !tx.category || !tx.date || !tx.amount )
+    if ( !tx.description || tx.type === "select" || !tx.category || !tx.date || !tx.amount )
     {
       alert( "Fill all fields" );
       return;
     }
 
-    const data = load( TX_KEY, [] );
-    data.push( tx );
-    save( TX_KEY, data );
+    if ( editId )
+    {
+      const index = transactions.findIndex( t => String( t.id ) === editId );
+      transactions[ index ] = tx;
+    } else
+    {
+      transactions.push( tx );
+    }
+
+    save( TX_KEY, transactions );
 
     const d = new Date( tx.date );
-    window.location.href =
-      `day.html?year=${ d.getFullYear() }&month=${ d.getMonth() + 1 }&day=${ d.getDate() }`;
+    location.href = `day.html?year=${ d.getFullYear() }&month=${ d.getMonth() + 1 }&day=${ d.getDate() }`;
   } );
+
 } )();

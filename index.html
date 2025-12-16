@@ -35,7 +35,7 @@
           <i class="bi bi-graph-up-arrow"></i>
         </div>
         <h4 id="totalIncome">$0</h4>
-        <p>2024 total</p>
+        <p><span id="yearLabel1">2024</span> total</p>
       </div>
 
       <!-- Card 2 -->
@@ -45,7 +45,7 @@
           <i class="bi bi-wallet"></i>
         </div>
         <h4 id="totalExpenses">$0</h4>
-        <p>2024 total</p>
+        <p><span id="yearLabel2">2024</span> total</p>
       </div>
 
       <!-- Card 3 -->
@@ -55,7 +55,7 @@
           <i class="bi bi-currency-dollar"></i>
         </div>
         <h4 id="totalSavings">$0</h4>
-        <p>2024 saved</p>
+        <p><span id="yearLabel3">2024</span> saved</p>
       </div>
 
       <!-- Card 4 -->
@@ -65,7 +65,7 @@
           <i class="bi bi-graph-up-arrow"></i>
         </div>
         <h4 id="netBalance">$0</h4>
-        <p>2024 net</p>
+        <p><span id="yearLabel4">2024</span> net</p>
       </div>
     </div>
 
@@ -86,7 +86,7 @@
 
       <!-- Expense Categories Chart -->
       <div class="chart-div">
-        <h2 class="chart-title">Expense Categories (2024)</h2>
+        <h2 class="chart-title">Expense Categories (<span id="pieYear">2024</span>)</h2>
         <canvas id="expensePie"></canvas>
       </div>
     </div>
@@ -96,55 +96,14 @@
 
     <!-- Buttons -->
     <div class="buttons">
-      <a href="add-transaction-form.html" id="addDetailsBtn" class="btn add-details-btn"
-        >Add Details</a
-      >
+      <a href="add_form.html" id="addDetailsBtn" class="btn add-details-btn">Add Details</a>
       <a href="month-overview.html" id="viewBtn" class="btn view-btn">View All Months</a>
     </div>
 
     <!-- Monthly Overview -->
-    <div class="months">
-      <!-- Month Card 1 -->
-      <!-- <div class="month-card">
-        <div class="month-header">
-          <div class="month-title">
-            <i class="bi bi-calendar-event"></i>
-            <span>January</span>
-          </div>
-        </div>
-
-        <div class="stats-row">
-          <div class="stat-box income-box">
-            <span class="label">Income</span>
-            <span class="value green">$0</span>
-          </div>
-
-          <div class="stat-box expenses-box">
-            <span class="label">Expenses</span>
-            <span class="value red">$35</span>
-          </div>
-
-          <div class="stat-box savings-box">
-            <span class="label">Savings</span>
-            <span class="value blue">$0</span>
-          </div>
-        </div>
-
-        <hr />
-
-        <div class="details-row">
-          <span>Net Savings:</span>
-          <span class="value red">-$35</span>
-        </div>
-
-        <div class="details-row">
-          <span>Transactions:</span>
-          <span class="value">1</span>
-        </div>
-      </div> -->
-    </div>
+    <div class="months"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
   </body>
 </html>
