@@ -176,16 +176,34 @@ function updateMonthlyChart ( year ) {
   const expenseArr = [];
   const savingsArr = [];
 
+  let total = 0;
+
   for ( let m = 0; m < 12; m++ )
   {
     const data = getByMonth( year, m );
     const income = sum( data, 'income' );
     const expense = sum( data, 'expense' );
     const savings = sum( data, 'savings' );
+
     incomeArr.push( income );
     expenseArr.push( expense );
     savingsArr.push( income - expense + savings );
+
+    total += income + expense + savings;
   }
+
+  const canvas = document.getElementById( "monthlyChart" );
+  const placeholder = document.getElementById( "monthlyPlaceholder" );
+
+  if ( total === 0 )
+  {
+    canvas.style.display = "none";
+    placeholder.style.display = "flex";
+    return;
+  }
+
+  canvas.style.display = "block";
+  placeholder.style.display = "none";
 
   monthlyChart.data.datasets[ 0 ].data = incomeArr;
   monthlyChart.data.datasets[ 1 ].data = expenseArr;
@@ -193,28 +211,36 @@ function updateMonthlyChart ( year ) {
   monthlyChart.update();
 }
 
+
 function updatePieChart ( year ) {
   const data = getByYear( year ).filter( t => t.type === 'expense' );
-
-  if ( !data.length )
-  {
-    // Optionally show "No data yet"
-    pieChart.data.labels = [ 'No Data' ];
-    pieChart.data.datasets[ 0 ].data = [ 1 ];
-    pieChart.update();
-    return;
-  }
-
   const categories = {};
 
   data.forEach( t => {
-    categories[ t.category ] = ( categories[ t.category ] || 0 ) + Number( t.amount );
+    categories[ t.category ] = ( categories[ t.category ] || 0 ) + t.amount;
   } );
 
+  const values = Object.values( categories );
+  const hasData = values.some( v => v > 0 );
+
+  const canvas = document.getElementById( "expensePie" );
+  const placeholder = document.getElementById( "piePlaceholder" );
+
+  if ( !hasData )
+  {
+    canvas.style.display = "none";
+    placeholder.style.display = "flex";
+    return;
+  }
+
+  canvas.style.display = "block";
+  placeholder.style.display = "none";
+
   pieChart.data.labels = Object.keys( categories );
-  pieChart.data.datasets[ 0 ].data = Object.values( categories );
+  pieChart.data.datasets[ 0 ].data = values;
   pieChart.update();
 }
+
 
 /* ===============================
    MAIN RENDER FUNCTION

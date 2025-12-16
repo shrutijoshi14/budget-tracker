@@ -177,6 +177,46 @@ header p {
   font-weight: 600;
 }
 
+.chart-wrapper {
+  position: relative;
+  min-height: 300px;
+}
+
+.chart-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #f8fafc;
+  border: 2px dashed #cbd5f5;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #64748b;
+  text-align: center;
+}
+
+.chart-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.chart-placeholder p {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.chart-placeholder small {
+  font-size: 13px;
+}
+
+canvas {
+  transition: opacity 0.3s ease;
+}
+
 .legend {
   display: flex;
   gap: 25px;

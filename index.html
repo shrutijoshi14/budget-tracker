@@ -75,6 +75,16 @@
         <h2 class="chart-title">Monthly Savings Trend</h2>
         <canvas id="monthlyChart"></canvas>
 
+        <div class="chart-wrapper">
+          <canvas id="monthlyChart"></canvas>
+
+          <div id="monthlyPlaceholder" class="chart-placeholder">
+            <i class="bi bi-bar-chart"></i>
+            <p>No data for this year</p>
+            <small>Start adding income or expenses</small>
+          </div>
+        </div>
+
         <!-- Custom Legend -->
         <div class="legend">
           <span><span class="dot income"></span> Income</span>
@@ -87,6 +97,16 @@
       <div class="chart-div">
         <h2 class="chart-title">Expense Categories (<span id="pieYear">2024</span>)</h2>
         <canvas id="expensePie"></canvas>
+
+        <div class="chart-wrapper">
+          <canvas id="expensePie"></canvas>
+
+          <div id="piePlaceholder" class="chart-placeholder">
+            <i class="bi bi-pie-chart"></i>
+            <p>No expense data available</p>
+            <small>Add transactions to see category breakdown</small>
+          </div>
+        </div>
       </div>
     </div>
 
