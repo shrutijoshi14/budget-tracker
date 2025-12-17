@@ -1,0 +1,504 @@
+/* ===================================
+  RESPONSIVE MEDIA QUERIES
+==================================== */
+
+/* Tablets and Small Laptops (768px - 1024px) */
+@media (max-width: 1024px) {
+  .charts {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  .chart-div {
+    max-width: 100%;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .months {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Header Adjustments */
+  header {
+    padding: 10px 15px;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  header p {
+    font-size: 14px;
+  }
+
+  header .year {
+    font-size: 18px;
+    margin: 20px 0 10px;
+  }
+
+  /* Cards Grid */
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .card h2 {
+    font-size: 16px;
+  }
+
+  .card h4 {
+    font-size: 20px;
+  }
+
+  .card .icon .bi {
+    font-size: 20px;
+  }
+
+  /* Charts */
+  .charts {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .chart-div {
+    height: auto;
+    padding: 15px;
+  }
+
+  .chart-div canvas {
+    height: 250px !important;
+  }
+
+  .chart-wrapper {
+    min-height: 250px;
+  }
+
+  .legend {
+    gap: 15px;
+    font-size: 14px;
+  }
+
+  /* Buttons */
+  .buttons {
+    flex-direction: column;
+    gap: 12px;
+    margin: 15px 0 30px;
+    padding: 0 15px;
+  }
+
+  .buttons .btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+  }
+
+  /* Dashboard Button */
+  .dashboard-btn {
+    flex-direction: column;
+    gap: 12px;
+    margin: 15px;
+    padding: 15px;
+    align-items: stretch;
+  }
+
+  .dashboard-btn a,
+  .dashboard-btn > .add-btn {
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Form */
+  form {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  form h2 {
+    font-size: 18px;
+  }
+
+  form input,
+  select {
+    font-size: 15px;
+  }
+
+  form .category {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  form .category button {
+    width: 100%;
+  }
+
+  /* Heading */
+  .heading {
+    margin-top: 30px;
+    padding: 0 15px;
+  }
+
+  .heading h1 {
+    font-size: 26px;
+  }
+
+  /* Months Grid */
+  .months {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .month-card {
+    width: 100%;
+  }
+
+  .month-title {
+    font-size: 20px;
+  }
+
+  .stats-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-box {
+    padding: 10px;
+  }
+
+  /* Dashboard (Calendar + Transactions) */
+  .dashboard {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .cal-card {
+    padding: 15px;
+  }
+
+  .transactions-card {
+    max-height: none;
+  }
+
+  .card-header {
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* Calendar */
+  .calendar-header {
+    gap: 10px;
+  }
+
+  .month-year {
+    font-size: 16px;
+  }
+
+  .calendar-grid {
+    gap: 8px;
+  }
+
+  .calendar-grid div {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+
+  /* Transactions */
+  .transaction-item {
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .transaction-right {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .icon-circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .transaction-info h3 {
+    font-size: 16px;
+  }
+
+  .meta {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .amount {
+    font-size: 18px;
+  }
+
+  /* Summary Grid */
+  .summary-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 15px;
+  }
+
+  .summary-card {
+    padding: 20px;
+    max-height: none;
+  }
+
+  .summary-card h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .summary-row {
+    font-size: 16px;
+  }
+
+  .category-pill {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .category-right {
+    gap: 8px;
+  }
+
+  /* Tooltip */
+  .custom-tooltip {
+    font-size: 13px;
+    padding: 10px 14px;
+    min-width: 130px;
+  }
+
+  .custom-tooltip .month {
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 22px;
+  }
+
+  header .year {
+    font-size: 16px;
+  }
+
+  .card h2 {
+    font-size: 15px;
+  }
+
+  .card h4 {
+    font-size: 18px;
+  }
+
+  .chart-div canvas {
+    height: 220px !important;
+  }
+
+  .chart-wrapper {
+    min-height: 220px;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .month-card {
+    padding: 18px;
+  }
+
+  .month-title {
+    font-size: 18px;
+  }
+
+  .value {
+    font-size: 16px;
+  }
+
+  .details-row {
+    font-size: 15px;
+  }
+
+  .calendar-grid {
+    gap: 6px;
+  }
+
+  .calendar-grid div {
+    padding: 6px 0;
+    font-size: 13px;
+  }
+
+  .transaction-item {
+    padding: 12px;
+  }
+
+  .transaction-info h3 {
+    font-size: 15px;
+  }
+
+  .amount {
+    font-size: 16px;
+  }
+
+  .summary-row {
+    font-size: 15px;
+  }
+
+  form {
+    margin: 10px;
+    padding: 12px;
+  }
+
+  .buttons .btn {
+    font-size: 15px;
+    padding: 10px 15px;
+  }
+
+  /* Make sure cards don't overflow on very small screens */
+  .cards {
+    padding: 10px;
+  }
+
+  .dashboard-btn {
+    margin: 10px;
+    padding: 12px;
+  }
+
+  .months {
+    padding: 10px;
+  }
+
+  .dashboard,
+  .summary-grid {
+    padding: 10px;
+  }
+}
+
+/* Extra Small Mobile (max-width: 360px) */
+@media (max-width: 360px) {
+  header h1 {
+    font-size: 20px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  .chart-title {
+    font-size: 16px;
+  }
+
+  .month-card {
+    padding: 15px;
+  }
+
+  .stat-box {
+    padding: 8px;
+  }
+
+  .value {
+    font-size: 15px;
+  }
+
+  form button {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+
+  .summary-card {
+    padding: 15px;
+  }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-width: 900px) and (orientation: landscape) {
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Ensure touch targets are at least 44x44px on mobile */
+@media (max-width: 768px) {
+  button,
+  .nav-btn,
+  select,
+  input[type='date'],
+  input[type='number'],
+  a.btn,
+  .dashboard-btn a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .calendar-grid div {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Fix for very wide screens */
+@media (min-width: 1400px) {
+  .months {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .dashboard,
+  .summary-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .dashboard-btn,
+  .buttons,
+  .nav-btn,
+  header .year button {
+    display: none;
+  }
+
+  .card,
+  .summary-card,
+  .cal-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .transaction-item {
+    page-break-inside: avoid;
+  }
+}
