@@ -2,8 +2,19 @@ const KEY = "bt_transactions";
 
 /* ========================= */
 const params = new URLSearchParams( location.search );
-let month = params.has( "month" ) ? +params.get( "month" ) : new Date().getMonth();
+// let month = params.has( "month" ) ? +params.get( "month" ) : new Date().getMonth();
+// let year = params.has( "year" ) ? +params.get( "year" ) : new Date().getFullYear();
+let monthParam = params.get( "month" );
 let year = params.has( "year" ) ? +params.get( "year" ) : new Date().getFullYear();
+
+let month = Number( monthParam );
+
+// fallback if month is invalid (NaN, undefined, string like "Jan")
+if ( isNaN( month ) || month < 0 || month > 11 )
+{
+  month = new Date().getMonth();
+}
+
 let selectedDate = null;
 
 const monthNames = [

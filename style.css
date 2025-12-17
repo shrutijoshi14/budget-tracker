@@ -150,7 +150,7 @@ header p {
 
 /* Graphs */
 
-.charts {
+/* .charts {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -260,6 +260,183 @@ canvas {
   }
 }
 
+.custom-tooltip {
+  position: absolute;
+  background: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  font-size: 14px;
+  z-index: 9999;
+  border: 1px solid #ddd;
+  text-align: left;
+  min-width: 150px;
+}
+
+.custom-tooltip .month {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.custom-tooltip .income {
+  background: rgba(75, 192, 192, 0.2);
+  color: rgb(75, 192, 192);
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.custom-tooltip .expenses {
+  background: rgba(255, 99, 132, 0.2);
+  color: rgb(255, 99, 132);
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.custom-tooltip .savings {
+  background: rgba(54, 162, 235, 0.2);
+  color: rgb(54, 162, 235);
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 16px;
+} */
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.chart-div {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  height: 420px;
+  width: 100%;
+  max-width: 500px;
+  flex-direction: column;
+  justify-content: space-between;
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.chart-div:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.chart-div canvas {
+  height: 300px !important;
+  max-width: 100%;
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.chart-wrapper {
+  position: relative;
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #f8fafc;
+  border: 2px dashed #cbd5f5;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #64748b;
+  text-align: center;
+}
+
+.chart-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.chart-placeholder p {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.chart-placeholder small {
+  font-size: 13px;
+}
+
+canvas {
+  transition: opacity 0.3s ease;
+}
+
+.legend {
+  display: flex;
+  gap: 25px;
+  margin: 20px 0 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: #555;
+}
+
+.legend .dot {
+  width: 22px;
+  height: 12px;
+  margin-right: 6px;
+  border-radius: 3px;
+  border: 2px solid;
+}
+
+.legend .income {
+  background: rgba(75, 192, 192, 0.2);
+  border-color: rgb(75, 192, 192);
+}
+
+.legend .expenses {
+  background: rgba(255, 99, 132, 0.2);
+  border-color: rgb(255, 99, 132);
+}
+
+.legend .savings {
+  background: rgba(54, 162, 235, 0.2);
+  border-color: rgb(54, 162, 235);
+}
+
+@media (max-width: 768px) {
+  .charts {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-div {
+    max-width: 100%;
+  }
+}
+
 /* Custom Tooltip */
 .custom-tooltip {
   position: absolute;
@@ -273,6 +450,18 @@ canvas {
   border: 1px solid #ddd;
   text-align: left;
   min-width: 150px;
+  animation: tooltipFade 0.2s ease-in-out;
+}
+
+@keyframes tooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .custom-tooltip .month {
