@@ -186,16 +186,18 @@ function updateCategory () {
   }
 
   Object.entries( map ).forEach( ( [ c, a ] ) => {
-    const txType = typeMap[ c ];
+    const txType = typeMap[ c ]; // income | expense | savings
+
     box.innerHTML += `
-      <div class="category-row">
-        <span class="category-pill">${ c }</span>
-        <div class="category-right">
-          <span class="amount">$${ a.toFixed( 2 ) }</span>
-          <span class="type">(${ txType })</span>
-        </div>
-      </div>`;
+    <div class="category-row">
+      <span class="category-pill ${ txType }">${ c }</span>
+      <div class="category-right">
+        <span class="amount">$${ a.toFixed( 2 ) }</span>
+        <span class="type">(${ txType })</span>
+      </div>
+    </div>`;
   } );
+
 }
 
 /* ========================= */
@@ -237,15 +239,16 @@ function renderCalendar () {
 
     if ( transactionDates.includes( i ) )
     {
-      day.style.background = '#2563eb';
+      day.style.background = '#a925ebff';
       day.style.color = '#fff';
-      day.style.borderRadius = '8px';
+      day.style.borderRadius = '100%';
       day.style.fontWeight = '600';
     }
 
     if ( selectedDate === i )
     {
-      day.style.outline = '2px solid #2563eb';
+      day.style.outline = '2px solid #a925ebff';
+      day.style.borderRadius = '100%';
       day.style.outlineOffset = '2px';
     }
 
