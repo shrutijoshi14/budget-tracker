@@ -502,3 +502,23 @@
     page-break-inside: avoid;
   }
 }
+
+@media (max-width: 480px) {
+  .months {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .month-card {
+    padding: 16px;
+  }
+
+  .month-title {
+    font-size: 20px;
+  }
+
+  .stat-box,
+  .details-row {
+    font-size: 15px;
+  }
+}
