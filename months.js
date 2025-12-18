@@ -75,15 +75,15 @@ function renderMonths () {
       <div class="stats-row">
         <div class="stat-box income-box">
           <span class="label">Income</span>
-          <span class="value green">$${ income.toFixed( 2 ) }</span>
+          <span class="value green">₹${ income.toFixed( 2 ) }</span>
         </div>
         <div class="stat-box expenses-box">
           <span class="label">Expenses</span>
-          <span class="value red">$${ expense.toFixed( 2 ) }</span>
+          <span class="value red">₹${ expense.toFixed( 2 ) }</span>
         </div>
         <div class="stat-box savings-box">
           <span class="label">Savings</span>
-          <span class="value blue">$${ savings.toFixed( 2 ) }</span>
+          <span class="value blue">₹${ savings.toFixed( 2 ) }</span>
         </div>
       </div>
 
@@ -91,7 +91,7 @@ function renderMonths () {
 
       <div class="details-row">
         <span>Net Balance:</span>
-        <span class="value ${ net < 0 ? 'red' : 'green' }">$${ net.toFixed( 2 ) }</span>
+        <span class="value ${ net < 0 ? 'red' : 'green' }">₹${ net.toFixed( 2 ) }</span>
       </div>
 
       <div class="details-row">
@@ -116,10 +116,10 @@ function updateSummary ( transactions ) {
   const savings = sum( transactions, "savings" );
   const net = income - expense + savings;
 
-  document.getElementById( "totalIncome" ).textContent = `$${ income.toFixed( 2 ) }`;
-  document.getElementById( "totalExpenses" ).textContent = `$${ expense.toFixed( 2 ) }`;
-  document.getElementById( "totalSavings" ).textContent = `$${ savings.toFixed( 2 ) }`;
-  document.getElementById( "netBalance" ).textContent = `$${ net.toFixed( 2 ) }`;
+  document.getElementById( "totalIncome" ).textContent = `₹${ income.toFixed( 2 ) }`;
+  document.getElementById( "totalExpenses" ).textContent = `₹${ expense.toFixed( 2 ) }`;
+  document.getElementById( "totalSavings" ).textContent = `₹${ savings.toFixed( 2 ) }`;
+  document.getElementById( "netBalance" ).textContent = `₹${ net.toFixed( 2 ) }`;
 }
 
 /* YEAR CONTROLS */

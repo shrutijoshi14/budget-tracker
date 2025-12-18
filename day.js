@@ -87,8 +87,8 @@ function renderTransactions () {
       </div>
 
       <div class="transaction-right">
-        <span class="amount ${ t.type === "expense" ? "negative" : "green" }">
-          ${ t.type === "expense" ? "-" : "+" }$${ t.amount.toFixed( 2 ) }
+        <span class="amount ${ t.type === "income" ? "green" : t.type === "expense" ? "negative" : "blue" }">
+          ${ t.type === "expense" ? "-" : "+" }₹${ t.amount.toFixed( 2 ) }
         </span>
         <i class="bi bi-pencil" onclick="editTx(${ t.id })" style="cursor:pointer; font-size:18px;"></i>
         <i class="bi bi-trash" onclick="deleteTx(${ t.id })" style="cursor:pointer; font-size:18px; color:#dc2626;"></i>
@@ -125,10 +125,10 @@ function updateCards () {
     if ( t.type === "savings" ) s += t.amount;
   } );
 
-  document.getElementById( "totalIncome" ).textContent = `$${ i.toFixed( 2 ) }`;
-  document.getElementById( "totalExpenses" ).textContent = `$${ e.toFixed( 2 ) }`;
-  document.getElementById( "totalSavings" ).textContent = `$${ s.toFixed( 2 ) }`;
-  document.getElementById( "netBalance" ).textContent = `$${ ( i - e + s ).toFixed( 2 ) }`;
+  document.getElementById( "totalIncome" ).textContent = `₹${ i.toFixed( 2 ) }`;
+  document.getElementById( "totalExpenses" ).textContent = `₹${ e.toFixed( 2 ) }`;
+  document.getElementById( "totalSavings" ).textContent = `₹${ s.toFixed( 2 ) }`;
+  document.getElementById( "netBalance" ).textContent = `₹${ ( i - e + s ).toFixed( 2 ) }`;
 }
 
 /* ========================= */
@@ -162,7 +162,7 @@ function updateSummary () {
 
   document.getElementById( "averageExpense" ).innerHTML = `
     <span>Average Expense:</span>
-    <span class="black">$${ avgExpense.toFixed( 2 ) }</span>
+    <span class="black">₹${ avgExpense.toFixed( 2 ) }</span>
   `;
 }
 
@@ -192,7 +192,7 @@ function updateCategory () {
     <div class="category-row">
       <span class="category-pill ${ txType }">${ c }</span>
       <div class="category-right">
-        <span class="amount">$${ a.toFixed( 2 ) }</span>
+        <span class="amount">₹${ a.toFixed( 2 ) }</span>
         <span class="type">(${ txType })</span>
       </div>
     </div>`;
@@ -237,6 +237,17 @@ function renderCalendar () {
     day.textContent = i;
     day.style.cursor = 'pointer';
 
+    // ✅ TODAY highlight
+    const today = new Date();
+    if (
+      i === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear()
+    )
+    {
+      day.classList.add( "today" );
+    }
+
     if ( transactionDates.includes( i ) )
     {
       day.style.background = '#a925ebff';
@@ -260,16 +271,6 @@ function renderCalendar () {
     grid.appendChild( day );
   }
 
-  // Next month days
-  const totalCells = grid.children.length - 7; // excluding day names
-  const remainingCells = ( 7 - ( totalCells % 7 ) ) % 7;
-  for ( let i = 1; i <= remainingCells; i++ )
-  {
-    const day = document.createElement( 'div' );
-    day.className = 'muted';
-    day.textContent = i;
-    grid.appendChild( day );
-  }
 }
 
 /* ========================= */

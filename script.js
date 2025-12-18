@@ -58,7 +58,7 @@ function setYear ( year ) {
 }
 
 /* ===============================
-   CHART INITIALIZATION
+  CHART INITIALIZATION
 ================================ */
 const monthlyCtx = document.getElementById( 'monthlyChart' );
 const pieCtx = document.getElementById( 'expensePie' );
@@ -116,9 +116,9 @@ let monthlyChart = new Chart( monthlyCtx, {
 
           tooltipEl.innerHTML = `
             <div class="month">${ month }</div>
-            <div class="income">Income: $${ income.toFixed( 2 ) }</div>
-            <div class="expenses">Expenses: $${ expenses.toFixed( 2 ) }</div>
-            <div class="savings">Net Savings: $${ savings.toFixed( 2 ) }</div>
+            <div class="income">Income: ₹${ income.toFixed( 2 ) }</div>
+            <div class="expenses">Expenses: ₹${ expenses.toFixed( 2 ) }</div>
+            <div class="savings">Net Savings: ₹${ savings.toFixed( 2 ) }</div>
           `;
 
           const position = context.chart.canvas.getBoundingClientRect();
@@ -168,7 +168,7 @@ let pieChart = new Chart( pieCtx, {
           label: function ( context ) {
             const label = context.label || '';
             const value = context.parsed || 0;
-            return label + ': $' + value.toFixed( 2 );
+            return label + ': ₹' + value.toFixed( 2 );
           }
         }
       }
@@ -269,10 +269,10 @@ function render () {
   const savings = sum( data, 'savings' );
   const net = income - expense + savings;
 
-  document.getElementById( 'totalIncome' ).textContent = `$${ income.toFixed( 2 ) }`;
-  document.getElementById( 'totalExpenses' ).textContent = `$${ expense.toFixed( 2 ) }`;
-  document.getElementById( 'totalSavings' ).textContent = `$${ savings.toFixed( 2 ) }`;
-  document.getElementById( 'netBalance' ).textContent = `$${ net.toFixed( 2 ) }`;
+  document.getElementById( 'totalIncome' ).textContent = `₹${ income.toFixed( 2 ) }`;
+  document.getElementById( 'totalExpenses' ).textContent = `₹${ expense.toFixed( 2 ) }`;
+  document.getElementById( 'totalSavings' ).textContent = `₹${ savings.toFixed( 2 ) }`;
+  document.getElementById( 'netBalance' ).textContent = `₹${ net.toFixed( 2 ) }`;
 
   const monthsBox = document.querySelector( '.months' );
   monthsBox.innerHTML = '';
@@ -302,21 +302,21 @@ function render () {
       <div class="stats-row">
         <div class="stat-box income-box">
           <span class="label">Income</span>
-          <span class="value green">$${ inc.toFixed( 2 ) }</span>
+          <span class="value green">₹${ inc.toFixed( 2 ) }</span>
         </div>
         <div class="stat-box expenses-box">
           <span class="label">Expenses</span>
-          <span class="value red">$${ exp.toFixed( 2 ) }</span>
+          <span class="value red">₹${ exp.toFixed( 2 ) }</span>
         </div>
         <div class="stat-box savings-box">
           <span class="label">Savings</span>
-          <span class="value blue">$${ sav.toFixed( 2 ) }</span>
+          <span class="value blue">₹${ sav.toFixed( 2 ) }</span>
         </div>
       </div>
       <hr />
       <div class="details-row">
         <span>Net Savings:</span>
-        <span class="value ${ netM < 0 ? 'red' : 'green' }">$${ netM.toFixed( 2 ) }</span>
+        <span class="value ${ netM < 0 ? 'red' : 'green' }">₹${ netM.toFixed( 2 ) }</span>
       </div>
       <div class="details-row">
         <span>Transactions:</span>
