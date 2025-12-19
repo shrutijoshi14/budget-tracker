@@ -22,6 +22,14 @@ const monthNames = [
   "July", "August", "September", "October", "November", "December"
 ];
 
+function formatAmount ( value ) {
+  if ( value === 0 || value === undefined || value === null || isNaN( value ) )
+  {
+    return '-';
+  }
+  return `₹${ Number( value ).toFixed( 2 ) }`;
+}
+
 /* ========================= */
 function loadTransactions () {
   return JSON.parse( localStorage.getItem( KEY ) ) || [];
@@ -125,10 +133,10 @@ function updateCards () {
     if ( t.type === "savings" ) s += t.amount;
   } );
 
-  document.getElementById( "totalIncome" ).textContent = `₹${ i.toFixed( 2 ) }`;
-  document.getElementById( "totalExpenses" ).textContent = `₹${ e.toFixed( 2 ) }`;
-  document.getElementById( "totalSavings" ).textContent = `₹${ s.toFixed( 2 ) }`;
-  document.getElementById( "netBalance" ).textContent = `₹${ ( i - e + s ).toFixed( 2 ) }`;
+  document.getElementById( "totalIncome" ).textContent = formatAmount( i );
+  document.getElementById( "totalExpenses" ).textContent = formatAmount( e );
+  document.getElementById( "totalSavings" ).textContent = formatAmount( s );
+  document.getElementById( "netBalance" ).textContent = formatAmount( i - e + s );
 }
 
 /* ========================= */
@@ -192,7 +200,7 @@ function updateCategory () {
     <div class="category-row">
       <span class="category-pill ${ txType }">${ c }</span>
       <div class="category-right">
-        <span class="amount">₹${ a.toFixed( 2 ) }</span>
+        <span class="amount">${ formatAmount( a ) }</span>
         <span class="type">(${ txType })</span>
       </div>
     </div>`;
