@@ -1,16 +1,14 @@
-/* ===============================
-  CHART INITIALIZATION & UPDATES
-================================ */
-
 let monthlyChart;
 let pieChart;
 
+// Initialize the bar and pie charts configuration
 function initCharts() {
   const monthlyCtx = document.getElementById('monthlyChart');
   const pieCtx = document.getElementById('expensePie');
 
   if (!monthlyCtx || !pieCtx) return;
 
+  // Monthly Income/Expense/Savings Bar Chart
   monthlyChart = new Chart(monthlyCtx, {
     type: 'bar',
     data: {
@@ -80,6 +78,7 @@ function initCharts() {
     },
   });
 
+  // Expense Categories Pie Chart
   pieChart = new Chart(pieCtx, {
     type: 'pie',
     data: {
@@ -126,6 +125,7 @@ function initCharts() {
   });
 }
 
+// Update charts with data for the selected year
 function updateCharts(year) {
   if (!monthlyChart || !pieChart) return;
 
@@ -151,6 +151,7 @@ function updateCharts(year) {
   const mCanvas = document.getElementById('monthlyChart');
   const mPlaceholder = document.getElementById('monthlyPlaceholder');
 
+  // Show placeholder if no data exists
   if (total === 0) {
     mCanvas.style.display = 'none';
     mPlaceholder.style.display = 'flex';
@@ -167,6 +168,7 @@ function updateCharts(year) {
   const data = getTransactionsByYear(year).filter((t) => t.type === 'expense');
   const categories = {};
 
+  // Aggregate expenses by category
   data.forEach((t) => {
     categories[t.category] = (categories[t.category] || 0) + t.amount;
   });

@@ -1,7 +1,3 @@
-/* ===============================
-   DAY / TRANSACTION CONTROLLER
-================================ */
-
 const params = new URLSearchParams(location.search);
 let monthParam = params.get('month');
 let year = params.has('year') ? +params.get('year') : new Date().getFullYear();
@@ -29,63 +25,72 @@ const monthNames = [
   'December',
 ];
 
-/* ========================= */
+// Filter transactions based on current month/year and optional day filter
 function filtered() {
   return getAllTransactions().filter((t) => {
     const d = new Date(t.date);
+    // If a specific day is selected (clicked on calendar), filtering by year, month AND day
     if (selectedDate !== null) {
       return d.getFullYear() === year && d.getMonth() === month && d.getDate() === selectedDate;
     }
+    // Else, just filtering by year and month
     return d.getFullYear() === year && d.getMonth() === month;
   });
 }
 
+// Calculate totals and update the summary cards (Income, Expense, Savings)
 function updateCards() {
   let i = 0,
     e = 0,
     s = 0;
+
+  // Loop through filtered transactions to sum up amounts
   filtered().forEach((t) => {
     if (t.type === 'income') i += t.amount;
     if (t.type === 'expense') e += t.amount;
     if (t.type === 'savings') s += t.amount;
   });
 
-  // Use Shared UI Logic
+  // Update UI Cards
   updateSummaryCards(i, e, s);
 }
 
+// Main render function for the Day View
 function renderAll() {
-  // Update Header
+  // Update Header text
   document.getElementById('monthYear').textContent = `${monthNames[month]} ${year}`;
   document.getElementById('pageTitle').textContent = `${monthNames[month]} ${year}`;
 
-  // Render Calendar (Calendar Logic is in calendar.js)
+  // Render Interactive Calendar
   renderCalendar(year, month, selectedDate, (day) => {
+    // If clicked date is same as selected, deselect it (toggle), else select new date
     selectedDate = selectedDate === day ? null : day;
     renderAll();
   });
 
-  // Render Transactions
+  // Render Transaction List
   renderTransactionsList();
 
-  // Update Cards & Summaries
+  // Update Stats Cards
   updateCards();
   updateSummary();
   updateCategory();
 }
 
-/* ========================= */
+// Render the list of transaction items
 function renderTransactionsList() {
   const container = document.getElementById('transactionsList');
   const tx = filtered();
 
   document.getElementById('countBadge').textContent = tx.length;
 
+  // If no transactions found, show empty message
   if (!tx.length) {
     container.innerHTML = `<p style="padding:20px; text-align:center; color:#64748b;">No transactions found</p>`;
     return;
   }
 
+  // Iterate over transactions and create HTML for each item
   container.innerHTML = tx
     .map(
       (t) => `
@@ -104,6 +109,7 @@ function renderTransactionsList() {
       </div>
 
       <div class="transaction-right">
+        <!-- Checking type to determine color: green for income, red for expense, blue for savings -->
         <span class="amount ${
           t.type === 'income' ? 'green' : t.type === 'expense' ? 'negative' : 'blue'
         }">
@@ -122,6 +128,7 @@ function renderTransactionsList() {
     .join('');
 }
 
+// Update the detailed summary stats section
 function updateSummary() {
   const tx = filtered();
   const incomeCount = tx.filter((t) => t.type === 'income').length;
@@ -129,6 +136,8 @@ function updateSummary() {
   const savingsCount = tx.filter((t) => t.type === 'savings').length;
 
   const expenseTotal = tx.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+
+  // Checking if there are expenses to calculate average, else 0 to avoid division by zero
   const avgExpense = expenseCount > 0 ? expenseTotal / expenseCount : 0;
 
   document.getElementById('summaryList').innerHTML = `
@@ -156,6 +165,7 @@ function updateSummary() {
   `;
 }
 
+// Update the category breakdown chart/list
 function updateCategory() {
   const box = document.getElementById('categoryBreakdown');
   box.innerHTML = `<h2>Category Breakdown</h2>`;
@@ -163,16 +173,19 @@ function updateCategory() {
   const map = {};
   const typeMap = {};
 
+  // Aggregate amounts by category
   filtered().forEach((t) => {
     map[t.category] = (map[t.category] || 0) + t.amount;
     typeMap[t.category] = t.type;
   });
 
+  // If no categories found (map is empty), show message
   if (Object.keys(map).length === 0) {
     box.innerHTML += `<p style="padding:20px; text-align:center; color:#64748b;">No categories to display</p>`;
     return;
   }
 
+  // Iterate over Categories and display them
   Object.entries(map).forEach(([c, a]) => {
     const txType = typeMap[c]; // income | expense | savings
 
@@ -204,11 +217,15 @@ function editTx(id) {
   location.href = `add-transaction-form.html?edit=${id}`;
 }
 
+// Handle month navigation (prev/next)
 function changeMonth(delta) {
   month += delta;
+
+  // If month goes beyond 11 (Dec), increment year
   if (month > 11) {
     month = 0;
     year++;
+    // If month goes below 0 (Jan), decrement year
   } else if (month < 0) {
     month = 11;
     year--;
@@ -219,7 +236,6 @@ function changeMonth(delta) {
   renderAll();
 }
 
-/* ========================= */
 document.getElementById('prevMonth').onclick = () => changeMonth(-1);
 document.getElementById('nextMonth').onclick = () => changeMonth(1);
 

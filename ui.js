@@ -1,11 +1,4 @@
-/* ===============================
-   SHARED UI COMPONENTS
-================================ */
-
-/**
- * Updates the 4 summary cards (Income, Expenses, Savings, Net Balance)
- * Assumes elements with IDs: totalIncome, totalExpenses, totalSavings, netBalance
- */
+// Update the 4 main summary cards (Income, Expense, Savings, Net Balance)
 function updateSummaryCards(income, expense, savings) {
   const net = income - expense + savings;
 
@@ -14,24 +7,20 @@ function updateSummaryCards(income, expense, savings) {
   const elSavings = document.getElementById('totalSavings');
   const elNet = document.getElementById('netBalance');
 
+  // Updating the Income Card
   if (elIncome) elIncome.textContent = formatAmount(income);
+  // Updating the Expense Card
   if (elExpense) elExpense.textContent = formatAmount(expense);
+  // Updating the Savings Card
   if (elSavings) elSavings.textContent = formatAmount(savings);
 
+  // Updating the Net Balance Card
   if (elNet) {
     elNet.textContent = formatAmount(net);
-    // Remove old classes if generic handling is needed, but typically we just set text
-    // Some pages might style it red/green. Let's handle generic red/green if needed?
-    // In day.js it doesn't seem to toggle class on the CARD, only in script.js on the LIST.
-    // Wait, index.html checks netBalance ID.
-    // In script.js: document.getElementById('netBalance').textContent = formatAmount(net);
-    // It does NOT change color of the card text in script.js, only in the Month Card list.
   }
 }
 
-/**
- * Creates the HTML string for a Month Card
- */
+// Generate HTML string for a single month summary card
 function createMonthCardHTML(year, monthIndex) {
   const monthNames = [
     'January',
@@ -48,7 +37,10 @@ function createMonthCardHTML(year, monthIndex) {
     'December',
   ];
 
+  // Get transactions for this specific month
   const mData = getTransactionsByMonth(year, monthIndex);
+
+  // Calculate totals for Income, Expense, and Savings cards within the month view
   const inc = sumTransactions(mData, 'income');
   const exp = sumTransactions(mData, 'expense');
   const sav = sumTransactions(mData, 'savings');
@@ -63,14 +55,17 @@ function createMonthCardHTML(year, monthIndex) {
     </div>
 
     <div class="stats-row">
+      <!-- Income Card -->
       <div class="stat-box income-box">
         <span class="label">Income</span>
         <span class="value green">${formatAmount(inc)}</span>
       </div>
+      <!-- Expense Card -->
       <div class="stat-box expenses-box">
         <span class="label">Expenses</span>
         <span class="value red">${formatAmount(exp)}</span>
       </div>
+      <!-- Savings Card -->
       <div class="stat-box savings-box">
         <span class="label">Savings</span>
         <span class="value blue">${formatAmount(sav)}</span>
@@ -81,6 +76,7 @@ function createMonthCardHTML(year, monthIndex) {
 
     <div class="details-row">
       <span>Net Balance:</span>
+      <!-- Check if balance is negative to apply red color, else green -->
       <span class="value netBal ${netM < 0 ? 'red' : 'green'}">${formatAmount(netM)}</span>
     </div>
 
@@ -91,14 +87,13 @@ function createMonthCardHTML(year, monthIndex) {
   `;
 }
 
-/**
- * Creates a Month Card Element and attaches the click handler
- */
+// Create the month card DOM element and attach click event
 function createMonthCardElement(year, monthIndex) {
   const card = document.createElement('div');
   card.className = 'month-card';
   card.innerHTML = createMonthCardHTML(year, monthIndex);
 
+  // If user clicks the card, navigate to the detailed day view
   card.onclick = () => {
     window.location.href = `day.html?year=${year}&month=${monthIndex}`;
   };

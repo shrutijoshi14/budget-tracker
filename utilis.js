@@ -1,3 +1,4 @@
+// Format a number as Indian Currency (e.g. ₹1,00,000.00)
 function formatAmount(value) {
   if (value === 0 || value === undefined || value === null || isNaN(value)) {
     return '-';
@@ -14,7 +15,4 @@ function formatAmount(value) {
           maximumFractionDigits: 2,
         })
   }`;
-
-  //This is the normal formatting version without , like 100000
-  // return `₹${num % 1 === 0 ? num : num.toFixed(2)}`;
 }

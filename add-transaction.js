@@ -12,7 +12,6 @@
 
   let transactions = loadTransactions();
 
-  /* ---------- INIT CATEGORIES ---------- */
   // Ensure categories exist in storage if not already
   if (!localStorage.getItem(DATA_CAT_KEY)) {
     saveCategories(loadCategories());
@@ -20,6 +19,7 @@
 
   category.disabled = true;
 
+  // Render the category dropdown options based on selected type
   function renderCategories(typeVal) {
     const cats = loadCategories();
     category.innerHTML = '';
@@ -30,6 +30,7 @@
       });
     }
 
+    // Special options for adding/editing categories
     category.appendChild(new Option('────────────', ''));
     category.appendChild(new Option('✏️ Edit selected category', '__edit'));
     category.appendChild(new Option('🗑️ Delete selected category', '__delete'));
@@ -37,7 +38,7 @@
     category.disabled = false;
   }
 
-  /* ---------- TYPE CHANGE ---------- */
+  // Handle Transaction Type Change
   type.addEventListener('change', () => {
     if (type.value === 'select') {
       category.disabled = true;
@@ -47,7 +48,7 @@
     renderCategories(type.value);
   });
 
-  /* ---------- CATEGORY ACTION ---------- */
+  // Handle Category Selection Actions (Edit/Delete custom logic)
   category.addEventListener('change', () => {
     const action = category.value;
     const cats = loadCategories();
@@ -80,7 +81,7 @@
     }
   });
 
-  /* ---------- ADD CATEGORY ---------- */
+  // Handle "Add New Category" Button
   addCategoryBtn.addEventListener('click', (e) => {
     e.preventDefault();
     if (type.value === 'select') {
@@ -100,7 +101,7 @@
     category.value = name.trim();
   });
 
-  /* ---------- EDIT MODE PREFILL ---------- */
+  // Prefill form if editing an existing transaction
   if (editId) {
     const tx = transactions.find((t) => String(t.id) === editId);
     if (tx) {
@@ -116,7 +117,7 @@
     }
   }
 
-  /* ---------- SUBMIT ---------- */
+  // Handle Form Submission - Transaction Initiated
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -138,6 +139,7 @@
       amount: Number(amount.value),
     };
 
+    // Check if any required field is missing
     if (!tx.description || tx.type === 'select' || !tx.category || !tx.date || !tx.amount) {
       alert('Fill all fields');
       return;
@@ -146,17 +148,22 @@
     // Refresh transactions before saving to avoid overwriting recent changes
     transactions = loadTransactions();
 
+    // Check if we are in Edit Mode (Updating existing transaction)
     if (editId) {
       const index = transactions.findIndex((t) => String(t.id) === editId);
+      // If transaction found, replace it
       if (index !== -1) {
         transactions[index] = tx;
       }
     } else {
+      // If adding new, push to the list
       transactions.push(tx);
     }
 
+    // Save updated list to storage
     saveTransactions(transactions);
 
+    // Redirect to the Day View of the transaction's date
     const d = new Date(tx.date);
     location.href = `day.html?year=${d.getFullYear()}&month=${d.getMonth()}&day=${d.getDate()}`;
   });

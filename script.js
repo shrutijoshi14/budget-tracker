@@ -1,41 +1,36 @@
-/* ===============================
-   MAIN DASHBOARD CONTROLLER
-================================ */
-
+// Main Dashboard rendering controller
 function render() {
   const year = getGlobalYear();
   document.getElementById('currentYear').textContent = year;
   document.getElementById('pieYear').textContent = year;
 
-  // Update year labels in cards
+  // Update year labels in summary cards
   document.querySelectorAll('[id^="yearLabel"]').forEach((el) => {
     el.textContent = year;
   });
 
+  // Calculate totals for the year
   const data = getTransactionsByYear(year);
   const income = sumTransactions(data, 'income');
   const expense = sumTransactions(data, 'expense');
   const savings = sumTransactions(data, 'savings');
 
-  // Use Shared UI Logic
+  // Passing data to update Income, Expense, and Savings Cards
   updateSummaryCards(income, expense, savings);
 
   // Render Month List
   const monthsBox = document.querySelector('.months');
   monthsBox.innerHTML = '';
 
-  // We can just iterate 0..11 and append cards
+  // Create card for each month (0-11) by looping through all months
   for (let m = 0; m < 12; m++) {
     monthsBox.appendChild(createMonthCardElement(year, m));
   }
 
-  // Update Charts
+  // Update Charts (Bar Chart for monthly breakdown, Pie Chart for expenses)
   updateCharts(year);
 }
 
-/* ===============================
-   EVENTS
-================================ */
 document.getElementById('prevYear').onclick = () => {
   setGlobalYear(getGlobalYear() - 1);
   render();
